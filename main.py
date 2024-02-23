@@ -10,8 +10,8 @@ class MyListener:
         self.name_func = {}
 
     #注册函数，当服务被发现时调用
-    def Sign_func(self,name,funtion):
-        self.name_func[name] = funtion
+    def Sign_func(self,server_name,funtion):
+        self.name_func[server_name] = funtion
 
     def add_service(self, zeroconf, type, name):
         info = zeroconf.get_service_info(type, name)
@@ -19,8 +19,9 @@ class MyListener:
         if info:
             ip_add = info.parsed_addresses()
             port = info.port
+            server_name = name.split(".")[0]
             self.addresses[name] = {"ip_add": ip_add, "port": port}
-            if name in self.name_func:
+            if server_name in self.name_func:
                 self.name_func[name](ip_add,port)
         else:
             print(f"No info={name}")
